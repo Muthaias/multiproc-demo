@@ -3,6 +3,7 @@ import time
 from parallel_search.process import process_files, process_synchronous
 from parallel_search.utility import get_paths, combine_sets
 
+
 def run(method: str, paths, num_procs):
     result = [set()]
     t1 = time.time()
@@ -13,6 +14,7 @@ def run(method: str, paths, num_procs):
     t2 = time.time()
     print("method(%s): %s" % (method, t2 - t1))
     return result
+
 
 if __name__ == "__main__":
     # Parse arguments

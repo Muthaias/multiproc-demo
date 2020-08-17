@@ -1,12 +1,12 @@
 import sys
 import os
-import random
-import string
 from parallel_search.utility import random_list
+
 
 def write_list(path: str, list: [str]):
     with open(path, 'w') as fp:
         fp.writelines(list)
+
 
 if __name__ == "__main__":
     path = sys.argv[1] if len(sys.argv) > 1 else "data/utf8list%s.txt"
