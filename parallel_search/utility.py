@@ -31,23 +31,9 @@ def random_list(
             yield value
 
 
-def read_interlaced_list(path: str, interlace: int, offset: int):
-    step = 0
-    for line in open(path, 'r'):
-        if step % interlace is offset:
-            yield line.replace("\n", "")
-        step = step + 1
-
-
 def read_list(path: str):
     for line in open(path, 'r'):
-        yield line.replace("\n", "")
-
-
-def read_complete_list(path: str):
-    with open(path, 'r') as fp:
-        data = fp.read()
-        return data.split("\n")
+        yield line
 
 
 def get_paths(args: [str]):

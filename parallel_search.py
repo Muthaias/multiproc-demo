@@ -32,4 +32,4 @@ if __name__ == "__main__":
     list = [item for item in final_set]
     list.sort()
     for item in list:
-        print(item)
+        print(item.replace("\n", ""))
