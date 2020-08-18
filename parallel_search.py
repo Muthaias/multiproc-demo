@@ -31,8 +31,12 @@ def set_of_strings_beginning_with_char(list: [str], char: str):
 
 def process_file_path(path: str, char: str):
     """Read and process a single file"""
-    list = open(path, 'r')
-    return set_of_strings_beginning_with_char(list, char)
+    try:
+        list = open(path, 'r')
+        return set_of_strings_beginning_with_char(list, char)
+    except FileNotFoundError:
+        print("Warning: File not found: %s" % path)
+    return set()    
 
 
 def process_files(paths: [str], processes: int):
