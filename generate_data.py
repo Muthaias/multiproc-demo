@@ -26,5 +26,5 @@ if __name__ == "__main__":
         return value[0] == 'r'
 
     for i in range(num_files):
-        list = random_list(count, length, ignore_func=ignore_func)
+        list = random_list(count, length, ignore_func=ignore_func, allow_count=10)
         write_list(path % i, list)

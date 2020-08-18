@@ -12,7 +12,7 @@ def combine_sets(sets: [set]):
 def random_list(
     count: int,
     length: int,
-    ignore_count=10000,
+    allow_count=10,
     ignore_func=None
 ):
     rs = 0
@@ -23,10 +23,10 @@ def random_list(
                 k=length
             )
         ) + '\n'
-        if ignore_func is None and ignore_func(value):
-            rs = rs + 1
-            if rs % ignore_count == 0:
+        if ignore_func is None or ignore_func(value):
+            if rs < allow_count:
                 yield value
+            rs = rs + 1
         else:
             yield value
 
