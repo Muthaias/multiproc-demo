@@ -1,0 +1,1 @@
+python parallel_search.py 2 data/*.txt
