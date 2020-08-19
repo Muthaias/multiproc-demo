@@ -1,29 +1,61 @@
 import sys
-import time
-from parallel_search.process import process_files, process_synchronous
-from parallel_search.utility import get_paths, combine_sets
+from glob import glob
+from functools import reduce
+from operator import or_
+from multiprocessing import Pool
 
 
-def run(method: str, paths, num_procs):
-    result = [set()]
-    t1 = time.time()
-    if method == "sync":
-        result = process_synchronous(paths)
-    elif method == "file":
-        result = process_files(paths, num_procs)
-    t2 = time.time()
-    print("method(%s): %s" % (method, t2 - t1))
-    return result
+def combine_sets(sets):
+    return reduce(or_, sets)
+
+
+def get_paths(args):
+    """Get paths from multiple globs"""
+    paths = []
+    for expr in args:
+        paths = paths + glob(expr)
+    return paths
+
+
+def set_of_strings_beginning_with_char(list, char):
+    """Find all lines starting with a specified character"""
+    initial_set = set()
+    for item in list:
+        try:
+            if item[0] is char:
+                initial_set.add(item)
+        except IndexError:
+            pass
+    return initial_set
+
+
+def process_file_path(path, char):
+    """Read and process a single file"""
+    try:
+        list = open(path, 'r')
+        return set_of_strings_beginning_with_char(list, char)
+    except FileNotFoundError:
+        print("Warning: File not found: %s" % path)
+    return set()    
+
+
+def process_files(paths, processes):
+    """Processes files in parallel using a process pool."""
+    pool = Pool(processes=processes)
+    result_promises = [
+        pool.apply_async(process_file_path, (path, 'r'))
+        for path in paths
+    ]
+    return [res.get() for res in result_promises]
 
 
 if __name__ == "__main__":
     # Parse arguments
-    method = sys.argv[1] if len(sys.argv) > 1 else "file"
-    num_procs = int(sys.argv[2]) if len(sys.argv) > 2 else 1
-    paths = get_paths(sys.argv[3:]) if len(sys.argv) > 3 else []
+    num_procs = int(sys.argv[1]) if len(sys.argv) > 1 else 1
+    paths = get_paths(sys.argv[2:]) if len(sys.argv) > 2 else []
 
     # Start processing
-    results = run(method, paths, num_procs)
+    results = process_files(paths, num_procs)
 
     # Reduce final result from list of sets
     final_set = combine_sets(results) if len(results) > 0 else []

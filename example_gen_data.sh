@@ -1,0 +1,1 @@
+python generate_data.py "data/test%s.txt" 30 20 10

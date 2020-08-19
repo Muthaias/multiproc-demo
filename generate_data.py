@@ -1,11 +1,29 @@
 import sys
 import os
-from parallel_search.utility import random_list
+import string
+import random
 
 
-def write_list(path: str, list: [str]):
-    with open(path, 'w') as fp:
-        fp.writelines(list)
+def random_list(
+    count: int,
+    length: int,
+    allow_count=10,
+    ignore_func=None
+):
+    rs = 0
+    for n in range(count):
+        value = ''.join(
+            random.choices(
+                string.ascii_lowercase + string.digits,
+                k=length
+            )
+        ) + '\n'
+        if ignore_func is None or ignore_func(value):
+            if rs < allow_count:
+                yield value
+            rs = rs + 1
+        else:
+            yield value
 
 
 if __name__ == "__main__":
@@ -22,9 +40,15 @@ if __name__ == "__main__":
         print("Could not create directory: %s" % (dirname))
         exit()
 
-    def ignore_func(value: str):
+    def ignore_func(value):
         return value[0] == 'r'
 
     for i in range(num_files):
-        list = random_list(count, length, ignore_func=ignore_func, allow_count=10)
-        write_list(path % i, list)
+        list = random_list(
+            count,
+            length,
+            ignore_func=ignore_func,
+            allow_count=10
+        )
+        with open(path % i, 'w') as fp:
+            fp.writelines(list)
