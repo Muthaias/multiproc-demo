@@ -1,19 +1,23 @@
 # Lösningsbeskrivning
 ## För att köra
+Följande är en enkel beskrivning av hur man kör programmet
 ```
 # Generisk beskrivning:
 #  * num_procs: Antalet process som process-poolen får använda under körning
 #  * file_glob_x: En filsökväg som får innehålla wildcards (*) för att matcha filer
 # python parallel_search.py <num_procs> <file_glob_0> ... <file_glob_N>
+
+# Exempel:
 python parallel_search.py 2 data/utf*.txt
 ```
 
 ## Implementationens egenskaper:
-* Beroende på vilken typ av disk programmet körs har programmet potential att vara I/O-bundet
+* Beroende på vilken typ av disk programmet läser från har programmet potential att vara I/O-bundet
     * Implementationen kommer att skala sämre med låga läshastigheter på disken från vilken filer hämtas
     * Använder man tillräckligt många trådar som läser samtidigt från samma disk kommer problemet att vara I/O-bundet
+    * När programmet når I/O begränsningar kommer möjligheten att skala begränsas
 * Implementationen är begränsad till att skala upp till och med antalet filer
-* Beräkningsbördan för processerna är jämn om storleken på filer är jämn
+* Beräkningsbördan för processerna är jämn om storleken filer emellan är jämn
 
 ## Implementationsbeskrivning
 * En process-pool används för att parallellisera över tillgängliga filer
