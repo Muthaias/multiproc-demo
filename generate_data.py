@@ -40,7 +40,7 @@ if __name__ == "__main__":
         print("Could not create directory: %s" % (dirname))
         exit()
 
-    def ignore_func(value: str):
+    def ignore_func(value):
         return value[0] == 'r'
 
     for i in range(num_files):

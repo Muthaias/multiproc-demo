@@ -5,11 +5,11 @@ from operator import or_
 from multiprocessing import Pool
 
 
-def combine_sets(sets: [set]):
+def combine_sets(sets):
     return reduce(or_, sets)
 
 
-def get_paths(args: [str]):
+def get_paths(args):
     """Get paths from multiple globs"""
     paths = []
     for expr in args:
@@ -17,7 +17,7 @@ def get_paths(args: [str]):
     return paths
 
 
-def set_of_strings_beginning_with_char(list: [str], char: str):
+def set_of_strings_beginning_with_char(list, char):
     """Find all lines starting with a specified character"""
     initial_set = set()
     for item in list:
@@ -29,7 +29,7 @@ def set_of_strings_beginning_with_char(list: [str], char: str):
     return initial_set
 
 
-def process_file_path(path: str, char: str):
+def process_file_path(path, char):
     """Read and process a single file"""
     try:
         list = open(path, 'r')
@@ -39,7 +39,7 @@ def process_file_path(path: str, char: str):
     return set()    
 
 
-def process_files(paths: [str], processes: int):
+def process_files(paths, processes):
     """Processes files in parallel using a process pool."""
     pool = Pool(processes=processes)
     result_promises = [
